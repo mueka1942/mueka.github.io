@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Booking — Bryan Ernesto Vizcaino Santos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* booking theme */
+    --bg:#15120f;
+    --panel:#211d19;
+    --panel-2:#2a2521;
+    --amber:#e2a23b;
+    --amber-dim:#8a672a;
+    --cream:#f2ead9;
+    --cream-dim:#b3a892;
+    --red:#c1443a;
+    --line:#3a332c;
+
+    /* invoice theme */
+    --paper:#FBF8F1;
+    --paper-edge:#EDE7D6;
+    --ink:#1B2A4A;
+    --ink-soft:#5B6B85;
+    --rule:#D8D2C0;
+    --stamp-draft:#8A8370;
+    --stamp-sent:#1B2A4A;
+    --stamp-paid:#2F6F4E;
+    --stamp-bg-draft:#F0EEE6;
+    --stamp-bg-sent:#E7ECF5;
+    --stamp-bg-paid:#E5F0E9;
+    --canvas:#EFECE3;
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:'IBM Plex Mono', 'Courier New', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;}
+
+  /* ===== BOOKING VIEW ===== */
+  #view-booking .wrap{max-width:760px;margin:0 auto;padding:0 24px 80px;}
+
+  .hero{position:relative;padding:64px 24px 40px;text-align:center;overflow:hidden;border-bottom:1px solid var(--line);}
+  .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.28em;text-transform:uppercase;color:var(--amber);margin-bottom:18px;}
+  .hero h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(34px,7vw,56px);line-height:1.02;letter-spacing:0.01em;margin:0 0 10px;text-transform:uppercase;}
+  .hero h1 span{color:var(--amber);}
+  .hero p{color:var(--cream-dim);font-size:15px;max-width:440px;margin:0 auto;}
+  #wave{display:block;margin:34px auto 0;width:100%;max-width:520px;height:64px;}
+  .wave-path{stroke:var(--amber);stroke-width:2;fill:none;opacity:0.85;}
+
+  .contact-bar{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:28px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--cream-dim);}
+  .contact-bar a{color:var(--cream);text-decoration:none;border-bottom:1px solid var(--amber-dim);}
+  .contact-bar a:hover{color:var(--amber);}
+
+  .sec-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:var(--amber);margin:0 0 14px;display:flex;align-items:center;gap:10px;}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--line);}
+
+  #view-booking section{padding:48px 0;border-bottom:1px solid var(--line);}
+
+  .hours-panel{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:22px 26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  .hours-panel .days{font-family:'Oswald',sans-serif;font-size:19px;letter-spacing:0.03em;}
+  .hours-panel .time{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:19px;}
+  .hours-note{font-size:13px;color:var(--cream-dim);margin-top:12px;}
+
+  .console{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:32px 28px 28px;}
+  .console-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:26px;}
+  .console-title{font-family:'Oswald',sans-serif;font-size:18px;text-transform:uppercase;letter-spacing:0.02em;}
+  .readout{font-family:'IBM Plex Mono',monospace;text-align:right;}
+  .readout .hrs{font-size:13px;color:var(--cream-dim);}
+  .readout .hrs b{color:var(--amber);font-size:15px;}
+
+  .fader-track{position:relative;height:6px;background:var(--line);border-radius:3px;margin:36px 4px 10px;}
+  input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:6px;background:transparent;position:relative;margin:0;top:-6px;}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:34px;border-radius:3px;background:linear-gradient(180deg,#f2ead9,#c9bda2);border:1px solid #6b5f4c;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.5);}
+  input[type="range"]::-moz-range-thumb{width:22px;height:34px;border-radius:3px;background:linear-gradient(180deg,#f2ead9,#c9bda2);border:1px solid #6b5f4c;cursor:pointer;}
+  .tick-labels{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cream-dim);margin-top:6px;}
+
+  .price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);margin-top:28px;border:1px solid var(--line);}
+  .price-cell{background:var(--panel-2);padding:16px 14px;text-align:center;}
+  .price-cell .k{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream-dim);margin-bottom:6px;}
+  .price-cell .v{font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--amber);}
+  .price-cell.deposit .v{color:var(--red);}
+  .save-tag{margin-top:14px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--amber-dim);}
+
+  .field-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+  .field{flex:1;min-width:200px;display:flex;flex-direction:column;gap:6px;}
+  .field label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--cream-dim);}
+  .field input{background:var(--panel);border:1px solid var(--line);border-radius:2px;color:var(--cream);padding:11px 12px;font-family:'Inter',sans-serif;font-size:16px;outline:none;}
+  .field input:focus{border-color:var(--amber);}
+  .field input::placeholder{color:#5a5148;}
+  .field input[type="date"], .field input[type="time"]{cursor:pointer;color-scheme:dark;}
+  .field input[type="date"]::-webkit-calendar-picker-indicator, .field input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(76%) sepia(28%) saturate(600%) hue-rotate(357deg) brightness(95%);cursor:pointer;padding:4px;}
+
+  .checkline{display:flex;align-items:flex-start;gap:10px;margin-top:20px;font-size:13px;color:var(--cream-dim);line-height:1.5;}
+  .checkline input{margin-top:3px;}
+
+  .submit-btn{margin-top:24px;width:100%;padding:15px;background:var(--amber);color:#15120f;border:none;border-radius:2px;font-family:'Oswald',sans-serif;font-size:15px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;}
+  .submit-btn:hover{background:#efb654;}
+  .submit-note{font-size:12px;color:var(--cream-dim);text-align:center;margin-top:10px;}
+
+  .policy-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
+  .policy-list li{display:flex;gap:12px;font-size:14px;color:var(--cream-dim);line-height:1.5;}
+  .policy-list li::before{content:'—';color:var(--red);flex-shrink:0;}
+
+  .deposit-callout{background:rgba(193,68,58,0.1);border:1px solid rgba(193,68,58,0.35);border-radius:2px;padding:16px 18px;margin-bottom:20px;font-size:14px;color:var(--cream);}
+  .deposit-callout b{color:var(--red);}
+
+  #view-booking footer{padding:36px 0 0;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--cream-dim);}
+
+  @media (max-width:520px){
+    .price-grid{grid-template-columns:1fr;}
+    .hours-panel{flex-direction:column;align-items:flex-start;}
+  }
+
+  /* ===== INVOICE VIEW ===== */
+  #view-invoice{display:none;}
+  #view-invoice body, #view-invoice{font-family:var(--sans);}
+  .inv-body{background:var(--canvas);min-height:100vh;padding:32px 16px 80px;color:var(--ink);}
+  .toolbar{max-width:900px;margin:0 auto 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .toolbar-title{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:0.01em;}
+  .toolbar-actions{display:flex;gap:8px;align-items:center;}
+  select, .btn{font-family:var(--sans);font-size:13px;border:1px solid var(--rule);background:#fff;color:var(--ink);padding:8px 14px;border-radius:3px;cursor:pointer;}
+  .btn:hover{background:var(--paper-edge);}
+  .btn-primary{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .btn-primary:hover{background:#2a3d63;}
+  .btn-ghost{border:none;background:transparent;color:var(--ink-soft);padding:4px 8px;font-size:16px;}
+  .btn-ghost:hover{color:#B23A2E;}
+
+  .sheet{max-width:900px;margin:0 auto;background:var(--paper);box-shadow:0 1px 0 var(--paper-edge), 0 20px 40px -20px rgba(27,42,74,0.25);padding:56px 60px 48px;position:relative;}
+  .sheet::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg, var(--canvas) 0 6px, transparent 6px 12px);}
+
+  #view-invoice input, #view-invoice textarea{font-family:inherit;color:var(--ink);background:transparent;border:none;outline:none;width:100%;padding:2px 0;}
+  #view-invoice input:hover, #view-invoice textarea:hover{background:rgba(27,42,74,0.03);}
+  #view-invoice input:focus, #view-invoice textarea:focus{background:rgba(27,42,74,0.05);box-shadow:inset 0 -1px 0 var(--ink-soft);}
+  #view-invoice textarea{resize:none;overflow:hidden;line-height:1.5;}
+  #view-invoice ::placeholder{color:#B7AF9A;}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:44px;}
+  .brand-name{font-family:var(--serif);font-size:28px;font-weight:600;margin:0 0 6px;}
+  .brand-field{font-size:13px;color:var(--ink-soft);margin:2px 0;}
+  .head-right{text-align:right;position:relative;}
+  .doc-label{font-family:var(--serif);font-size:34px;font-style:italic;font-weight:500;letter-spacing:0.01em;margin:0 0 8px;text-align:right;}
+  .meta-row{display:flex;justify-content:flex-end;gap:8px;font-size:13px;margin:3px 0;align-items:baseline;}
+  .meta-label{color:var(--ink-soft);white-space:nowrap;}
+  .meta-row input{text-align:right;font-family:var(--mono);font-size:13px;width:130px;}
+
+  .stamp{position:absolute;top:-6px;right:-16px;width:104px;height:104px;border-radius:50%;border:2px dashed currentColor;display:flex;align-items:center;justify-content:center;transform:rotate(-14deg);cursor:pointer;user-select:none;font-family:var(--serif);font-weight:600;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;}
+  .stamp[data-status="draft"]{color:var(--stamp-draft);background:var(--stamp-bg-draft);}
+  .stamp[data-status="sent"]{color:var(--stamp-sent);background:var(--stamp-bg-sent);}
+  .stamp[data-status="paid"]{color:var(--stamp-paid);background:var(--stamp-bg-paid);}
+  .stamp:hover{opacity:0.85;}
+
+  .parties{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:40px;}
+  .party-label{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
+  .party textarea{font-size:14px;line-height:1.6;min-height:76px;}
+
+  #view-invoice table{width:100%;border-collapse:collapse;margin-bottom:8px;}
+  #view-invoice thead th{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:500;padding:0 8px 10px;border-bottom:1px solid var(--ink);}
+  #view-invoice thead th.num{text-align:right;}
+  #view-invoice tbody td{padding:10px 8px;border-bottom:1px solid var(--rule);vertical-align:top;font-size:14px;}
+  #view-invoice tbody td.num{text-align:right;font-family:var(--mono);}
+  #view-invoice tbody tr:hover{background:rgba(27,42,74,0.02);}
+  .col-desc{width:46%;}
+  .col-qty{width:12%;}
+  .col-rate{width:16%;}
+  .col-amt{width:18%;}
+  .col-del{width:6%;text-align:center;}
+  .qty-input, .rate-input{font-family:var(--mono);text-align:right;}
+  .amount-cell{font-family:var(--mono);font-weight:500;}
+
+  .add-row-btn{margin-top:10px;font-family:var(--sans);font-size:13px;color:var(--ink-soft);background:none;border:none;cursor:pointer;padding:6px 8px;}
+  .add-row-btn:hover{color:var(--ink);}
+
+  .perforation{height:1px;margin:32px 0 28px;background-image:radial-gradient(circle, var(--rule) 1.4px, transparent 1.4px);background-size:8px 1px;}
+
+  .foot{display:flex;justify-content:space-between;gap:40px;}
+  .notes{flex:1;}
+  .notes textarea{font-size:13px;color:var(--ink-soft);min-height:70px;line-height:1.6;}
+  .totals{width:280px;flex-shrink:0;}
+  .total-row{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:7px 0;}
+  .total-row.editable{gap:8px;}
+  .total-row .tlabel{color:var(--ink-soft);display:flex;align-items:center;gap:6px;}
+  .total-row .pct-input{font-family:var(--mono);width:44px;text-align:right;border-bottom:1px solid var(--rule);padding:0 2px;}
+  #view-invoice input.pct-input:disabled{color:var(--ink-soft);background:rgba(27,42,74,0.04);cursor:not-allowed;box-shadow:none;}
+  .lock-ico{font-size:11px;opacity:0.55;cursor:help;margin-left:2px;}
+  .total-row .tval{font-family:var(--mono);}
+  .total-row.grand{border-top:2px solid var(--ink);margin-top:8px;padding-top:14px;font-size:19px;font-weight:600;}
+  .total-row.grand .tval{font-family:var(--mono);font-weight:600;}
+
+  @media (max-width:640px){
+    .sheet{padding:32px 20px;}
+    .head{flex-direction:column;}
+    .head-right{text-align:left;width:100%;}
+    .doc-label{text-align:left;}
+    .meta-row{justify-content:space-between;}
+    .stamp{position:static;margin:16px 0 0;transform:rotate(-6deg);}
+    .parties{grid-template-columns:1fr;}
+    .foot{flex-direction:column;}
+    .totals{width:100%;}
+    thead th.col-qty, tbody td.col-qty{display:none;}
+  }
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .toolbar{display:none;}
+    .sheet{box-shadow:none;max-width:100%;padding:40px;}
+    .stamp{cursor:default;}
+    .btn-ghost{display:none;}
+    #view-invoice input:hover, #view-invoice textarea:hover, #view-invoice input:focus, #view-invoice textarea:focus{background:transparent;box-shadow:none;}
+    #view-booking{display:none !important;}
+  }
+
+  @media (prefers-reduced-motion: reduce){ .wave-path{animation:none !important;} }
+</style>
+</head>
+<body>
+
+<!-- ===================== BOOKING VIEW ===================== -->
+<div id="view-booking">
+  <div class="hero">
+    <div class="hero-eyebrow">Session Booking</div>
+    <h1>Book Your <span>Session</span></h1>
+    <p>Recording sessions with Bryan Ernesto Vizcaino Santos. Set your hours, lock your deposit, walk in ready.</p>
+    <svg id="wave" viewBox="0 0 520 64" preserveAspectRatio="none">
+      <path class="wave-path" id="wavePath" d=""/>
+    </svg>
+    <div class="contact-bar">
+      <a href="tel:2812357230">281-235-7230</a>
+      <a href="mailto:mueka1942@gmail.com">mueka1942@gmail.com</a>
+      <span>Zelle: mueka1943@gmail.com</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section>
+      <div class="sec-label">Studio Hours</div>
+      <div class="hours-panel">
+        <div class="days">Monday – Sunday</div>
+        <div class="time">10:00 AM – 6:00 PM</div>
+      </div>
+      <div class="hours-note">All sessions must be scheduled and confirmed in advance.</div>
+    </section>
+
+    <section>
+      <div class="sec-label">Session Length</div>
+      <div class="console">
+        <div class="console-top">
+          <div class="console-title">Drag to set hours</div>
+          <div class="readout"><span class="hrs">Selected — <b id="hrsLabel">4</b> HRS</span></div>
+        </div>
+        <input type="range" id="hourSlider" min="2" max="8" step="1" value="4">
+        <div class="tick-labels"><span>2h</span><span>3h</span><span>4h</span><span>5h</span><span>6h</span><span>7h</span><span>8h</span></div>
+        <div class="price-grid">
+          <div class="price-cell"><div class="k">Session Price</div><div class="v" id="priceOut">$135</div></div>
+          <div class="price-cell deposit"><div class="k">Deposit (50%)</div><div class="v" id="depositOut">$68</div></div>
+          <div class="price-cell"><div class="k">Balance Due</div><div class="v" id="balanceOut">$67</div></div>
+        </div>
+        <div class="save-tag" id="saveTag">You save $5 vs. hourly rate</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-label">Session Details</div>
+      <div class="field-row">
+        <div class="field"><label>Session Date</label><input type="date" id="sessionDate"></div>
+        <div class="field"><label>Start Time</label><input type="time" id="startTime"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-label">Client Information</div>
+      <div class="field-row">
+        <div class="field"><label>Full Name</label><input type="text" id="fullName" placeholder="Your name"></div>
+        <div class="field"><label>Artist Name (optional)</label><input type="text" id="artistName" placeholder="Stage name"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Phone Number</label><input type="tel" id="phone" placeholder="(___) ___-____"></div>
+        <div class="field"><label>Email Address</label><input type="email" id="email" placeholder="you@email.com"></div>
+      </div>
+
+      <div class="checkline">
+        <input type="checkbox" id="agree">
+        <label for="agree">I acknowledge that I have read, understood, and agree to the studio policies, payment terms, and booking conditions below.</label>
+      </div>
+
+      <button class="submit-btn" onclick="handleSubmit()">Generate Invoice</button>
+      <div class="submit-note">This builds a ready-to-send invoice from your session details — no retyping. A 50% non-refundable deposit confirms your booking.</div>
+    </section>
+
+    <section style="border-bottom:none;">
+      <div class="sec-label">Payment &amp; Policies</div>
+      <div class="deposit-callout"><b>50% non-refundable deposit</b> is required to reserve your session. Bookings are not guaranteed until the deposit has been received.</div>
+      <ul class="policy-list">
+        <li>Deposits are non-refundable.</li>
+        <li>No-shows forfeit their deposit.</li>
+        <li>Late arrivals will result in reduced recording time.</li>
+        <li>Sessions end at the scheduled time regardless of arrival time.</li>
+        <li>Additional studio time is subject to availability and will be billed accordingly.</li>
+      </ul>
+    </section>
+
+    <footer>Bryan Ernesto Vizcaino Santos &nbsp;·&nbsp; 281-235-7230 &nbsp;·&nbsp; mueka1942@gmail.com</footer>
+  </div>
+</div>
+
+<!-- ===================== INVOICE VIEW ===================== -->
+<div id="view-invoice">
+  <div class="inv-body">
+    <div class="toolbar">
+      <div class="toolbar-title">Ledger — invoice</div>
+      <div class="toolbar-actions">
+        <button class="btn" id="backBtn">← Edit booking</button>
+        <button class="btn" id="emailInvBtn" title="Sends a copy to the email address entered on the booking form">Email me a copy</button>
+        <select id="currency">
+          <option value="$">USD $</option>
+          <option value="€">EUR €</option>
+          <option value="£">GBP £</option>
+          <option value="₹">INR ₹</option>
+          <option value="¥">JPY ¥</option>
+        </select>
+        <button class="btn btn-primary" id="printBtn">Download PDF</button>
+      </div>
+    </div>
+
+    <div class="sheet" id="sheet">
+      <div class="head">
+        <div class="head-left">
+          <div class="brand-name"><input id="bizName" value="Bryan Ernesto Vizcaino Santos"></div>
+          <div class="brand-field"><input id="bizLine1" value="Recording Studio"></div>
+          <div class="brand-field"><input id="bizPhone" value="281-235-7230"></div>
+          <div class="brand-field"><input id="bizEmail" value="mueka1942@gmail.com"></div>
+        </div>
+        <div class="head-right">
+          <div class="stamp" id="stamp" data-status="draft" title="Click to change status">Draft</div>
+          <div class="doc-label">Invoice</div>
+          <div class="meta-row"><span class="meta-label">No.</span><input id="invNum" value="INV-0001"></div>
+          <div class="meta-row"><span class="meta-label">Issued</span><input type="date" id="issueDate"></div>
+          <div class="meta-row"><span class="meta-label">Due</span><input type="date" id="dueDate"></div>
+        </div>
+      </div>
+
+      <div class="parties">
+        <div class="party">
+          <div class="party-label">Bill to</div>
+          <textarea rows="3" id="billTo" placeholder="Client name&#10;Client address&#10;Client email"></textarea>
+        </div>
+        <div class="party">
+          <div class="party-label">Payment to</div>
+          <textarea rows="3" id="paymentTo">Zelle: mueka1943@gmail.com</textarea>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th class="col-desc">Description</th>
+            <th class="col-qty num">Qty</th>
+            <th class="col-rate num">Rate</th>
+            <th class="col-amt num">Amount</th>
+            <th class="col-del"></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <button class="add-row-btn" id="addRow">+ Add line item</button>
+
+      <div class="perforation"></div>
+
+      <div class="foot">
+        <div class="notes">
+          <div class="party-label">Notes</div>
+          <textarea rows="4" id="invNotes"></textarea>
+        </div>
+        <div class="totals">
+          <div class="total-row"><span class="tlabel">Subtotal</span><span class="tval" id="subtotal">$0.00</span></div>
+          <div class="total-row editable">
+            <span class="tlabel">Discount <input class="pct-input" id="discountPct" type="number" min="0" value="0" disabled title="Locked to the session length chosen at booking">% <span class="lock-ico" title="Locked to the session length chosen at booking">🔒</span></span>
+            <span class="tval" id="discountVal">–$0.00</span>
+          </div>
+          <div class="total-row editable">
+            <span class="tlabel">Tax <input class="pct-input" id="taxPct" type="number" min="0" value="0">%</span>
+            <span class="tval" id="taxVal">$0.00</span>
+          </div>
+          <div class="total-row grand"><span>Total due</span><span class="tval" id="grandTotal">$0.00</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- booking pricing + interactions ---------- */
+const pricing = {
+  2:{price:70, save:0}, 3:{price:100, save:5}, 4:{price:135, save:5},
+  5:{price:165, save:10}, 6:{price:200, save:10}, 7:{price:230, save:15}, 8:{price:260, save:20}
+};
+
+const slider = document.getElementById('hourSlider');
+const hrsLabel = document.getElementById('hrsLabel');
+const priceOut = document.getElementById('priceOut');
+const depositOut = document.getElementById('depositOut');
+const balanceOut = document.getElementById('balanceOut');
+const saveTag = document.getElementById('saveTag');
+
+function updateSlider(){
+  const hrs = parseInt(slider.value,10);
+  const data = pricing[hrs];
+  hrsLabel.textContent = hrs;
+  priceOut.textContent = '$' + data.price;
+  const deposit = Math.round(data.price/2);
+  const balance = data.price - deposit;
+  depositOut.textContent = '$' + deposit;
+  balanceOut.textContent = '$' + balance;
+  saveTag.textContent = data.save > 0 ? `You save $${data.save} vs. hourly rate` : `Base rate — $35/hr, 2-hour minimum`;
+}
+slider.addEventListener('input', updateSlider);
+updateSlider();
+
+['sessionDate','startTime'].forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('click', () => {
+    if (typeof el.showPicker === 'function') { try { el.showPicker(); } catch(e) {} }
+  });
+});
+
+const wavePath = document.getElementById('wavePath');
+const W = 520, H = 64, MID = 32;
+let t = 0;
+function drawWave(){
+  let d = `M0,${MID}`;
+  for(let x=0;x<=W;x+=8){
+    const y = MID + Math.sin((x*0.045)+t)*14*Math.sin((x*0.01)+t*0.3) + Math.sin((x*0.09)-t*1.4)*5;
+    d += ` L${x},${y.toFixed(1)}`;
+  }
+  wavePath.setAttribute('d', d);
+  t += 0.025;
+  requestAnimationFrame(drawWave);
+}
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduceMotion){ drawWave(); } else {
+  let d = `M0,${MID}`;
+  for(let x=0;x<=W;x+=8){ d += ` L${x},${(MID+Math.sin(x*0.05)*10).toFixed(1)}`; }
+  wavePath.setAttribute('d', d);
+}
+
+/* ---------- invoice engine ---------- */
+const rowsEl = document.getElementById('rows');
+const currencySel = document.getElementById('currency');
+function currency(){ return currencySel.value; }
+function fmt(n){ return currency() + (isFinite(n)?n:0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function makeRow(desc, qty, rate){
+  var tr = document.createElement('tr');
+  tr.className = 'item-row';
+  tr.innerHTML =
+    '<td class="col-desc"><input class="desc-input" placeholder="Item or service description" value="'+(desc||'')+'"></td>'+
+    '<td class="col-qty num"><input class="qty-input" type="number" min="0" step="1" value="'+(qty!=null?qty:1)+'"></td>'+
+    '<td class="col-rate num"><input class="rate-input" type="number" min="0" step="0.01" value="'+(rate!=null?rate:0)+'"></td>'+
+    '<td class="col-amt num amount-cell">'+fmt(0)+'</td>'+
+    '<td class="col-del"><button class="btn-ghost" title="Remove line">×</button></td>';
+  rowsEl.appendChild(tr);
+  tr.querySelector('.btn-ghost').addEventListener('click', function(){ tr.remove(); recalc(); });
+  return tr;
+}
+
+function recalc(){
+  var subtotal = 0;
+  document.querySelectorAll('.item-row').forEach(function(tr){
+    var qty = parseFloat(tr.querySelector('.qty-input').value) || 0;
+    var rate = parseFloat(tr.querySelector('.rate-input').value) || 0;
+    var amt = qty * rate;
+    subtotal += amt;
+    tr.querySelector('.amount-cell').textContent = fmt(amt);
+  });
+  var discPct = parseFloat(document.getElementById('discountPct').value) || 0;
+  var taxPct = parseFloat(document.getElementById('taxPct').value) || 0;
+  var discVal = subtotal * discPct / 100;
+  var taxVal = (subtotal - discVal) * taxPct / 100;
+  var total = subtotal - discVal + taxVal;
+
+  document.getElementById('subtotal').textContent = fmt(subtotal);
+  document.getElementById('discountVal').textContent = '–' + fmt(discVal);
+  document.getElementById('taxVal').textContent = fmt(taxVal);
+  document.getElementById('grandTotal').textContent = fmt(total);
+}
+
+document.getElementById('addRow').addEventListener('click', function(){ makeRow('', 1, 0); recalc(); });
+rowsEl.addEventListener('input', recalc);
+document.getElementById('discountPct').addEventListener('input', recalc);
+document.getElementById('taxPct').addEventListener('input', recalc);
+currencySel.addEventListener('change', recalc);
+
+var stamp = document.getElementById('stamp');
+var statuses = ['draft','sent','paid'];
+stamp.addEventListener('click', function(){
+  var i = statuses.indexOf(stamp.getAttribute('data-status'));
+  var next = statuses[(i+1) % statuses.length];
+  stamp.setAttribute('data-status', next);
+  stamp.textContent = next.charAt(0).toUpperCase() + next.slice(1);
+});
+
+document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+
+/* ---------- bridge: booking submit -> populated invoice ---------- */
+function invNumber(dateStr){
+  var d = dateStr ? new Date(dateStr) : new Date();
+  var stamp = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+  var rand = Math.floor(100 + Math.random()*900);
+  return 'INV-' + stamp + '-' + rand;
+}
+
+function handleSubmit(){
+  const agree = document.getElementById('agree').checked;
+  const name = document.getElementById('fullName').value.trim();
+  const artistName = document.getElementById('artistName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const date = document.getElementById('sessionDate').value;
+  const time = document.getElementById('startTime').value;
+  const hrs = parseInt(slider.value,10);
+  const data = pricing[hrs];
+  const deposit = Math.round(data.price/2);
+  const balance = data.price - deposit;
+
+  if(!name || !phone || !email || !date || !time){
+    alert('Please fill in your name, phone, email, session date, and start time.');
+    return;
+  }
+  if(!agree){
+    alert('Please confirm you agree to the studio policies before submitting.');
+    return;
+  }
+
+  // ---- populate invoice ----
+  document.getElementById('invNum').value = invNumber(date);
+  var today = new Date();
+  document.getElementById('issueDate').value = today.toISOString().slice(0,10);
+  document.getElementById('dueDate').value = date;
+
+  var billLines = [name + (artistName ? ' (' + artistName + ')' : '')];
+  billLines.push(phone);
+  billLines.push(email);
+  document.getElementById('billTo').value = billLines.join('\n');
+
+  var timeLabel = time ? formatTime(time) : '';
+  var hourly = 35; // base hourly rate the package discount is measured against
+  var rowSubtotal = hourly * hrs;
+  var discPercent = data.save > 0 ? (data.save / rowSubtotal * 100) : 0;
+
+  rowsEl.innerHTML = '';
+  makeRow('Recording session — ' + hrs + ' hrs @ $' + hourly + '/hr (' + date + (timeLabel ? ', ' + timeLabel : '') + ')', hrs, hourly);
+  document.getElementById('discountPct').value = discPercent ? discPercent.toFixed(4) : 0;
+
+  document.getElementById('invNotes').value =
+    (data.save > 0 ? 'Includes a $' + data.save + ' multi-hour package discount vs. the $' + hourly + '/hr base rate.\n' : '') +
+    '50% non-refundable deposit of $' + deposit + ' is due to confirm this booking.\n' +
+    'Remaining balance of $' + balance + ' is due at the start of the session.\n' +
+    'Deposits are non-refundable; late arrivals reduce session time.';
+
+  stamp.setAttribute('data-status','sent');
+  stamp.textContent = 'Sent';
+
+  recalc();
+  showInvoice();
+
+  // auto-open a pre-filled email to the studio, addressed and ready to send
+  var mail = buildInvoiceMail();
+  window.location.href = 'mailto:mueka1942@gmail.com?subject=' + encodeURIComponent(mail.subject) + '&body=' + encodeURIComponent(mail.body);
+}
+
+function buildInvoiceMail(){
+  var lines = [];
+  document.querySelectorAll('.item-row').forEach(function(tr){
+    var desc = tr.querySelector('.desc-input').value;
+    var amt = tr.querySelector('.amount-cell').textContent;
+    lines.push('- ' + desc + ': ' + amt);
+  });
+  var subject = 'Invoice ' + document.getElementById('invNum').value + ' — ' + document.getElementById('bizName').value;
+  var body =
+    'Invoice: ' + document.getElementById('invNum').value + '\n' +
+    'Issued: ' + document.getElementById('issueDate').value + '\n' +
+    'Due: ' + document.getElementById('dueDate').value + '\n\n' +
+    'Bill to:\n' + document.getElementById('billTo').value + '\n\n' +
+    'Items:\n' + lines.join('\n') + '\n\n' +
+    'Discount: ' + document.getElementById('discountVal').textContent + '\n' +
+    'Total due: ' + document.getElementById('grandTotal').textContent + '\n\n' +
+    document.getElementById('invNotes').value;
+  return {subject: subject, body: body};
+}
+
+function formatTime(t){
+  var parts = t.split(':');
+  var h = parseInt(parts[0],10);
+  var m = parts[1];
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  var h12 = h % 12 === 0 ? 12 : h % 12;
+  return h12 + ':' + m + ' ' + ampm;
+}
+
+function showInvoice(){
+  document.getElementById('view-booking').style.display = 'none';
+  document.getElementById('view-invoice').style.display = 'block';
+  window.scrollTo(0,0);
+}
+function showBooking(){
+  document.getElementById('view-invoice').style.display = 'none';
+  document.getElementById('view-booking').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+document.getElementById('backBtn').addEventListener('click', showBooking);
+
+document.getElementById('emailInvBtn').addEventListener('click', function(){
+  var mail = buildInvoiceMail();
+  var clientEmail = document.getElementById('email').value.trim();
+  window.location.href = 'mailto:' + encodeURIComponent(clientEmail) + '?subject=' + encodeURIComponent(mail.subject) + '&body=' + encodeURIComponent(mail.body);
+});
+
+// seed empty invoice with one blank row until a booking is submitted
+makeRow('', 1, 0);
+recalc();
+</script>
+</body>
+</html>
